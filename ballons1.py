@@ -49,7 +49,7 @@ def update(selinde):
 def callback():
     update()
 
- update()
+update()
 
 update(selinde)
 canvas.bind("<Button-1>", click)
