@@ -122,7 +122,7 @@ class MyApplication(Frame):
         self.Size=1
         self.Step=1         
 
-        self.canvas=tk.Canvas(master, width=300, height=200, background='white')
+        self.canvas=tk.Canvas(master, width=400, height=400, background='white')
         self.canvas.grid(row=0,column=0)
 
 
@@ -181,6 +181,7 @@ class MyApplication(Frame):
 
          return Step
 
+# Functions to initialize buttons
 def helloStart():
     global Turnedon
     
@@ -205,6 +206,7 @@ def helloClear():
         ballonw.update()
 
 
+# Main 
 root = Tk()
 app = MyApplication(root)
 app.controlFramedelay()
@@ -224,5 +226,6 @@ button2.grid(row=300,column=3,columnspan=5)
 w = Label(root)
 w.grid(column=10)
 root.title("Ballons Game")
+w.config(text = "Score:"+ str(0))
 
 root.mainloop()
