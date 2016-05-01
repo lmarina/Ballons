@@ -127,34 +127,42 @@ class MyApplication(Frame):
 
 
         label = Label(self, text='Count')
-        label.grid(row=0,column=2)
+        label.grid(row=0,column=2,sticky=(N,S,E,W))
         self.sc1 = Scale(self, variable=1, from_=100, to=1)
         self.sc1.bind("<ButtonRelease-1>", self.updateValueCount)
-        self.sc1.grid(row=1, column=2)
+        self.sc1.grid(row=1, column=2, sticky=(N,S,E,W))
+
+	button = Button(root,text='Start', command=helloStart)
+	button1 = Button(root,text='Stop', command=helloStop)
+	button2 = Button(root,text='Clear', command=helloClear)
+	button.grid(row=400,sticky=(W))
+	button1.grid(row=400,sticky=(N))
+	button2.grid(row=400,sticky=(E))
+
 
     def controlFramedelay(self):
 
         label = Label(self, text='Delay')
-        label.grid(row=0, column=3)
+        label.grid(row=0, column=3,sticky=(N,S,E,W))
         self.sc2 = Scale(self,variable=1.1, from_=10, to=1)
         self.sc2.bind("<ButtonRelease-1>", self.updateValueDelay)
-        self.sc2.grid(row=1,column=3)
+        self.sc2.grid(row=1,column=3,sticky=(N,S,E,W))
 
         
     def controlFramesize(self):
  
         label = Label(self, text='Size')
-        label.grid(row=0, column=4)
+        label.grid(row=0, column=4, sticky=(N,S,E,W))
         self.sc3 = Scale(self,variable=1.2, from_=3, to=1)
         self.sc3.bind("<ButtonRelease-1>", self.updateValueSize)
-        self.sc3.grid(row=1,column=4)
+        self.sc3.grid(row=1,column=4, sticky=(N,S,E,W))
 
     def controlFramestep(self): 
         label = Label(self, text='Step')
-        label.grid(row=0, column=5)
+        label.grid(row=0, column=5,sticky=(N,S,E,W))
         self.sc4 = Scale(self,variable=20, from_=100, to=1)
         self.sc4.bind("<ButtonRelease-1>", self.updateValueStep)
-        self.sc4.grid(row=1,column=5)
+        self.sc4.grid(row=1,column=5, sticky=(N,S,E,W))
 
 
     def updateValueCount(self,event):
@@ -215,17 +223,10 @@ app.controlFramestep()
 
 Turnedon = 1
 
-button = Button(app, text='Start', command=helloStart)
-button1 = Button(app, text='Stop', command=helloStop)
-button2 = Button(app, text='Clear', command=helloClear)
-button.grid(row=300,column=1,columnspan=2)
-button1.grid(row=300,column=2,columnspan=3)
-button2.grid(row=300,column=3,columnspan=5)
-
-
 w = Label(root)
-w.grid(column=10)
-root.title("Ballons Game")
+w.grid(column=10,sticky=(E))
 w.config(text = "Score:"+ str(0))
 
+
+root.title("Ballons Game")
 root.mainloop()
