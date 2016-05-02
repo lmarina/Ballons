@@ -1,13 +1,26 @@
 import sys
-import Tkinter as tk
 from random import randint
-from Tkinter import *
 
+# Tkinter management
+
+try:
+    # for Python2
+    import Tkinter as tk
+    from Tkinter import *
+except ImportError:
+    try:
+         # for Python3
+         import tkinter as tk
+         from tkinter import *
+    except ImportError:
+         print "------------------------------------------------------------------------------"
+         print "Warning !!!: a needed software TKINTER has to be installed to run this program"
+         print "------------------------------------------------------------------------------"
 
 #Ballon's Class
 
 class Baloons:
-    
+
 
    def __init__(self,wdw, dimension, rootspeed):
         self.canvas= Canvas(wdw, width=dimension, height=dimension)
@@ -36,50 +49,62 @@ class Baloons:
             self.ySpeed = 9000
         elif self.xSpeed == 10:
             self.ySpeed = 10000
- 
+
         self.update()
         self.update2()
         self.canvas.after(self.ySpeed,self.Refresher)
-        self.canvas.after(self.ySpeed-5,self.Refresher2)
+        self.canvas.after(self.ySpeed * 5,self.Refresher2)
         self.canvas.bind("<Button-1>", self.click2)
 
    def click2(self, event):
 
+       xCount = app.updateValueCount(root)
        xWidth = app.updateValueSize(root)
        xStep = app.updateValueStep(root)
        item = self.canvas.find_withtag(CURRENT)
        xStep = app.updateValueStep(root)
+
        if item:
+
+           if (xStep >= 1 and xStep <= 10):
+                  xWidth = 1
+           elif (xStep >= 10 and xStep <= 25):
+                  xWidth = 2
+           elif (xStep >= 25 and xStep <= 50):
+                  xWidth = 3
+           elif (xStep >= 50 and xStep <= 75):
+                  xWidth = 4
+           elif (xStep >= 75 and xStep <= 100 ):
+                  xWidth = 5
+
            self.canvas.delete(item)
-           if xStep > 1:
-                  xWidth = xWidth - 1
-           
            self.score = self.score + xWidth
 
        w.config(text = "Score:"+ str(self.score))
 
    def update(self):
-      
+
       xWidth = app.updateValueSize(root)
       xCount = app.updateValueCount(root)
       xStep = app.updateValueStep(root)
       trasher = self.canvas.find_withtag("A2")
       xState = "normal"
-      if trasher: 
-           self.canvas.delete(trasher)
+      xTags = "A1"
 
-      if xStep > 50:
+      if trasher:
+           self.canvas.delete(trasher)
+      if xStep > 90:
             xState = 'hidden'
       elif xStep > 1:
-            xState = 'disabled'
-            xWidth = xWidth - 1
+            if xWidth > 1 :
+               xWidth = xWidth - 2
       elif xStep==1:
             xState = 'normal'
 
       for i in range(xCount):
           x, y = randint(0, 400-1), randint(0, 400-1)
-          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", width = xWidth, stipple='@./image1.xbm',state =xState)
-          self.canvas.itemconfig(oval,tags="A1")
+          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", outline="green", width = xWidth, stipple='@./image1.xbm', outlinestipple='gray12',state =xState)
+          self.canvas.itemconfig(oval,tags=xTags)
 
 
    def update2(self):
@@ -89,26 +114,27 @@ class Baloons:
       trasher = self.canvas.find_withtag("A1")
       xStep = app.updateValueStep(root)
       xState = "normal"
+      xTags="A2"
 
-      if trasher: 
+      if trasher:
            self.canvas.delete(trasher)
 
-      if xStep > 50:
+      if xStep > 90:
            xState = 'hidden'
       elif xStep > 1:
-           xState = 'disabled'
-           xWidth = xWidth - 1
+           if xWidth > 1 :
+               xWidth = xWidth - 2
       elif xStep == 1:
            xState = 'normal'
 
       for i in range(xCount):
           x, y = randint(0, 400-1), randint(0, 400-1)
-          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red",width = xWidth, stipple='@./image1.xbm',state =xState)
-          self.canvas.itemconfig(oval,tags="A2")
+          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red",outline="green",width = xWidth, stipple='@./image1.xbm', outlinestipple='gray12',state =xState)
+          self.canvas.itemconfig(oval,tags=xTags)
 
 
    def delete(self):
-       
+
        xWidth = app.updateValueSize(root)
        xCount = 1
 
@@ -121,9 +147,9 @@ class Baloons:
       self.canvas.after(self.ySpeed,self.update)
       self.canvas.after(self.ySpeed,self.Refresher)
 
-  
+
    def Refresher2(self):
-      trasher = self.canvas.find_withtag("A2") 
+      trasher = self.canvas.find_withtag("A2")
       self.canvas.delete(trasher)
       self.canvas.after(self.ySpeed,self.update2)
       self.canvas.after(self.ySpeed,self.Refresher2)
@@ -137,7 +163,7 @@ class MyApplication(Frame):
     Size=1
     Step=1
 
-    #When a class is initialized, this is called as per any class 
+    #When a class is initialized, this is called as per any class
     def __init__(self, master):
 
         #Similar to saying MyFrame = Frame(master)
@@ -148,12 +174,10 @@ class MyApplication(Frame):
         self.Count=1
         self.Delay=1
         self.Size=1
-        self.Step=1         
+        self.Step=1
 
         self.canvas=tk.Canvas(master, width=400, height=400, background='white')
-        
         self.canvas.grid(row=0,column=0)
-
         label = Label(self, text='Count')
         label.grid(row=0,column=2,sticky=(N,S,E,W))
 
@@ -161,12 +185,12 @@ class MyApplication(Frame):
         self.sc1.grid(row=1, column=2)
 	self.sc1.bind("<ButtonRelease-1>", self.updateValueCount)
 
-	button = Button(root,text='Start', command=helloStart)
-	button1 = Button(root,text='Stop', command=helloStop)
-	button2 = Button(root,text='Clear', command=helloClear)
-	button.grid(row=400,sticky=(W))
-	button1.grid(row=400,sticky=(N))
-	button2.grid(row=400,sticky=(E))
+        button = Button(root,text='Start', command=helloStart)
+        button1 = Button(root,text='Stop', command=helloStop)
+        button2 = Button(root,text='Clear', command=helloClear)
+        button.grid(row=400,sticky=(W))
+        button1.grid(row=400,sticky=(N))
+        button2.grid(row=400,sticky=(E))
 
 
     def controlFramedelay(self):
@@ -175,18 +199,18 @@ class MyApplication(Frame):
         label.grid(row=0, column=3,sticky=(N,S,E,W))
         self.sc2 = Scale(self,variable=1.1, from_=10, to=1)
         self.sc2.grid(row=1,column=3)
-        self.sc2.bind("<ButtonRelease-1>", self.updateValueDelay)  
-    
-    
+        self.sc2.bind("<ButtonRelease-1>", self.updateValueDelay)
+
+
     def controlFramesize(self):
- 
+
         label = Label(self, text='Size')
         label.grid(row=0, column=4, sticky=(N,S,E,W))
-        self.sc3 = Scale(self,variable=1.2, from_=5, to=1)
+        self.sc3 = Scale(self,variable=1.2, from_=10, to=1)
         self.sc3.bind("<ButtonRelease-1>", self.updateValueSize)
         self.sc3.grid(row=1,column=4)
 
-    def controlFramestep(self): 
+    def controlFramestep(self):
         label = Label(self, text='Step')
         label.grid(row=0, column=5,sticky=(N,S,E,W))
         self.sc4 = Scale(self,variable=20, from_=100, to=1)
@@ -195,15 +219,15 @@ class MyApplication(Frame):
 
 
     def updateValueCount(self,event):
-   
+
         Count = self.sc1.get()
 
         return Count
-        
+
     def updateValueDelay(self,event):
 
         Delay = self.sc2.get()
-        
+
         return Delay
 
     def updateValueSize(self,event):
@@ -221,16 +245,16 @@ class MyApplication(Frame):
 # Functions to initialize buttons
 def helloStart():
     global Turnedon
-    
+
     if Turnedon == 1:
-    
+
         ballonw = Baloons(root,400,1000)
         Turnedon = 0
         ballonw.update()
 
 def helloStop():
      global Turnedon
-     
+
      Turnedon = 1
      ballonw = Baloons(root,400,99000)
 
@@ -240,7 +264,7 @@ def helloClear():
       ballonw.delete()
 
 
-# Main 
+# Main
 root = Tk()
 app = MyApplication(root)
 app.controlFramedelay()
@@ -252,11 +276,6 @@ Turnedon = 1
 w = Label(root)
 w.grid(column=10,sticky=(E))
 w.config(text = "Score:"+ str(0))
-
-
-if float(sys.version.split()[0][:3]) < 2.7:
-    print "Python 2.7 or higher required to run this code, " + sys.version.split()[0] + " detected, exiting."
-    exit(1)
 
 
 root.title("Ballons Game")
