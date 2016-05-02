@@ -53,33 +53,38 @@ class Baloons:
         self.update()
         self.update2()
         self.canvas.after(self.ySpeed,self.Refresher)
-        self.canvas.after(self.ySpeed * 5,self.Refresher2)
+        self.canvas.after((self.ySpeed*3),self.Refresher2)
         self.canvas.bind("<Button-1>", self.click2)
 
    def click2(self, event):
 
        xCount = app.updateValueCount(root)
-       xWidth = app.updateValueSize(root)
+       xWidth = 10
        xStep = app.updateValueStep(root)
        item = self.canvas.find_withtag(CURRENT)
        xStep = app.updateValueStep(root)
 
        if item:
 
-           if (xStep >= 1 and xStep <= 10):
-                  xWidth = 1
+           if (xStep > 1 and xStep <= 10):
+               #   item = self.canvas.find_withtag("A3")
+                  xWidth = 10
            elif (xStep >= 10 and xStep <= 25):
-                  xWidth = 2
+               #   item = self.canvas.find_withtag("A3")
+                  xWidth = 20
            elif (xStep >= 25 and xStep <= 50):
-                  xWidth = 3
+               #   item = self.canvas.find_withtag("A3")
+                  xWidth = 30
            elif (xStep >= 50 and xStep <= 75):
-                  xWidth = 4
-           elif (xStep >= 75 and xStep <= 100 ):
-                  xWidth = 5
-
+               #   item = self.canvas.find_withtag("A3")
+                  xWidth = 40
+           elif (xStep >= 75 and xStep <= 98 ):
+               #   item = self.canvas.find_withtag("A3")
+                  xWidth = 5         
+ 
            self.canvas.delete(item)
            self.score = self.score + xWidth
-
+       
        w.config(text = "Score:"+ str(self.score))
 
    def update(self):
@@ -88,16 +93,28 @@ class Baloons:
       xCount = app.updateValueCount(root)
       xStep = app.updateValueStep(root)
       trasher = self.canvas.find_withtag("A2")
+      trasher2 = self.canvas.find_withtag("A3")
+
       xState = "normal"
       xTags = "A1"
 
+      if self.ySpeed > 99000 :
+          xState = "hidden"
+
       if trasher:
            self.canvas.delete(trasher)
-      if xStep > 90:
+
+      if trasher2:
+           self.canvas.delete(trasher2)
+
+      if xStep > 98:
             xState = 'hidden'
       elif xStep > 1:
+            xTags="A3"
             if xWidth > 1 :
-               xWidth = xWidth - 2
+               xWidth = xWidth - 25
+               if xWidth < 1:
+                  xWidth = xWidth + 25
       elif xStep==1:
             xState = 'normal'
 
@@ -111,19 +128,31 @@ class Baloons:
 
       xWidth = app.updateValueSize(root)
       xCount = app.updateValueCount(root)
+      xStep = app.updateValueStep(root)
       trasher = self.canvas.find_withtag("A1")
+      trasher2 = self.canvas.find_withtag("A3")
+
       xStep = app.updateValueStep(root)
       xState = "normal"
       xTags="A2"
 
+      if self.ySpeed > 99000 :
+         xState = "hidden"
+
       if trasher:
            self.canvas.delete(trasher)
 
-      if xStep > 90:
+      if trasher2:
+          self.canvas.delete(trasher2)
+
+      if xStep > 98:
            xState = 'hidden'
       elif xStep > 1:
+           xTags = "A3"
            if xWidth > 1 :
-               xWidth = xWidth - 2
+               xWidth = xWidth - 25
+               if xWidth < 1 :
+                  xWidth = xWidth + 25
       elif xStep == 1:
            xState = 'normal'
 
@@ -142,6 +171,8 @@ class Baloons:
             x, y = randint(0, 400-1), randint(0, 400-1)
             oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="",width = xWidth)
        self.canvas.delete("all")
+       self.score = 0
+       w.config(text = "Score:"+ str(self.score))
 
    def Refresher(self):
       self.canvas.after(self.ySpeed,self.update)
@@ -206,7 +237,7 @@ class MyApplication(Frame):
 
         label = Label(self, text='Size')
         label.grid(row=0, column=4, sticky=(N,S,E,W))
-        self.sc3 = Scale(self,variable=1.2, from_=10, to=1)
+        self.sc3 = Scale(self,variable=1.2, from_=100, to=1)
         self.sc3.bind("<ButtonRelease-1>", self.updateValueSize)
         self.sc3.grid(row=1,column=4)
 
@@ -256,11 +287,11 @@ def helloStop():
      global Turnedon
 
      Turnedon = 1
-     ballonw = Baloons(root,400,99000)
+     ballonw = Baloons(root,400,99550)
 
 def helloClear():
 
-      ballonw = Baloons(root,400,1000)
+      ballonw = Baloons(root,400,3000)
       ballonw.delete()
 
 
