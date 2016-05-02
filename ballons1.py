@@ -48,9 +48,12 @@ class Baloons:
        xWidth = app.updateValueSize(root)
        xStep = app.updateValueStep(root)
        item = self.canvas.find_withtag(CURRENT)
+       xStep = app.updateValueStep(root)
        if item:
            self.canvas.delete(item)
-        
+           if xStep > 1:
+                  xWidth = xWidth - 1
+           
            self.score = self.score + xWidth
 
        w.config(text = "Score:"+ str(self.score))
@@ -69,6 +72,7 @@ class Baloons:
             xState = 'hidden'
       elif xStep > 1:
             xState = 'disabled'
+            xWidth = xWidth - 1
       elif xStep==1:
             xState = 'normal'
 
@@ -93,6 +97,7 @@ class Baloons:
            xState = 'hidden'
       elif xStep > 1:
            xState = 'disabled'
+           xWidth = xWidth - 1
       elif xStep == 1:
            xState = 'normal'
 
