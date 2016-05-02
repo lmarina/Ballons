@@ -1,3 +1,4 @@
+import sys
 import Tkinter as tk
 from random import randint
 from Tkinter import *
@@ -14,6 +15,7 @@ class Baloons:
         self.score=0
         self.xWidth= app.updateValueSize(root)
         self.xSpeed= app.updateValueDelay(root)
+        self.xStep= app.updateValueStep(root)
         self.ySpeed = rootspeed
 
         if self.xSpeed == 2:
@@ -44,11 +46,11 @@ class Baloons:
    def click2(self, event):
 
        xWidth = app.updateValueSize(root)
-       
+       xStep = app.updateValueStep(root)
        item = self.canvas.find_withtag(CURRENT)
        if item:
            self.canvas.delete(item)
-           
+        
            self.score = self.score + xWidth
 
        w.config(text = "Score:"+ str(self.score))
@@ -57,13 +59,22 @@ class Baloons:
       
       xWidth = app.updateValueSize(root)
       xCount = app.updateValueCount(root)
+      xStep = app.updateValueStep(root)
       trasher = self.canvas.find_withtag("A2")
+      xState = "normal"
       if trasher: 
            self.canvas.delete(trasher)
 
+      if xStep > 50:
+            xState = 'hidden'
+      elif xStep > 1:
+            xState = 'disabled'
+      elif xStep==1:
+            xState = 'normal'
+
       for i in range(xCount):
           x, y = randint(0, 400-1), randint(0, 400-1)
-          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", width = xWidth)
+          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", width = xWidth, stipple='@./image1.xbm',state =xState)
           self.canvas.itemconfig(oval,tags="A1")
 
 
@@ -72,19 +83,34 @@ class Baloons:
       xWidth = app.updateValueSize(root)
       xCount = app.updateValueCount(root)
       trasher = self.canvas.find_withtag("A1")
+      xStep = app.updateValueStep(root)
+      xState = "normal"
 
       if trasher: 
            self.canvas.delete(trasher)
 
+      if xStep > 50:
+           xState = 'hidden'
+      elif xStep > 1:
+           xState = 'disabled'
+      elif xStep == 1:
+           xState = 'normal'
+
       for i in range(xCount):
           x, y = randint(0, 400-1), randint(0, 400-1)
-          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red",width = xWidth)
+          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red",width = xWidth, stipple='@./image1.xbm',state =xState)
           self.canvas.itemconfig(oval,tags="A2")
 
 
    def delete(self):
-       self.canvas.delete("all")
+       
+       xWidth = app.updateValueSize(root)
+       xCount = 1
 
+       for i in range(xCount):
+            x, y = randint(0, 400-1), randint(0, 400-1)
+            oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="",width = xWidth)
+       self.canvas.delete("all")
 
    def Refresher(self):
       self.canvas.after(self.ySpeed,self.update)
@@ -111,10 +137,7 @@ class MyApplication(Frame):
 
         #Similar to saying MyFrame = Frame(master)
         Frame.__init__(self, master)
-        self.height=400
-        #Puts the frame on a grid. 
         self.grid(row=0,column=1)
-
         #Puts control frame values
 
         self.Count=1
@@ -123,14 +146,15 @@ class MyApplication(Frame):
         self.Step=1         
 
         self.canvas=tk.Canvas(master, width=400, height=400, background='white')
+        
         self.canvas.grid(row=0,column=0)
-
 
         label = Label(self, text='Count')
         label.grid(row=0,column=2,sticky=(N,S,E,W))
+
         self.sc1 = Scale(self, variable=1, from_=100, to=1)
-        self.sc1.bind("<ButtonRelease-1>", self.updateValueCount)
-        self.sc1.grid(row=1, column=2, sticky=(N,S,E,W))
+        self.sc1.grid(row=1, column=2)
+	self.sc1.bind("<ButtonRelease-1>", self.updateValueCount)
 
 	button = Button(root,text='Start', command=helloStart)
 	button1 = Button(root,text='Stop', command=helloStop)
@@ -145,24 +169,24 @@ class MyApplication(Frame):
         label = Label(self, text='Delay')
         label.grid(row=0, column=3,sticky=(N,S,E,W))
         self.sc2 = Scale(self,variable=1.1, from_=10, to=1)
-        self.sc2.bind("<ButtonRelease-1>", self.updateValueDelay)
-        self.sc2.grid(row=1,column=3,sticky=(N,S,E,W))
-
-        
+        self.sc2.grid(row=1,column=3)
+        self.sc2.bind("<ButtonRelease-1>", self.updateValueDelay)  
+    
+    
     def controlFramesize(self):
  
         label = Label(self, text='Size')
         label.grid(row=0, column=4, sticky=(N,S,E,W))
-        self.sc3 = Scale(self,variable=1.2, from_=3, to=1)
+        self.sc3 = Scale(self,variable=1.2, from_=5, to=1)
         self.sc3.bind("<ButtonRelease-1>", self.updateValueSize)
-        self.sc3.grid(row=1,column=4, sticky=(N,S,E,W))
+        self.sc3.grid(row=1,column=4)
 
     def controlFramestep(self): 
         label = Label(self, text='Step')
         label.grid(row=0, column=5,sticky=(N,S,E,W))
         self.sc4 = Scale(self,variable=20, from_=100, to=1)
         self.sc4.bind("<ButtonRelease-1>", self.updateValueStep)
-        self.sc4.grid(row=1,column=5, sticky=(N,S,E,W))
+        self.sc4.grid(row=1,column=5)
 
 
     def updateValueCount(self,event):
@@ -204,14 +228,11 @@ def helloStop():
      
      Turnedon = 1
      ballonw = Baloons(root,400,99000)
-     ballonw.update()
 
 def helloClear():
 
-    if Turnedon == 0:
-        ballonw = Baloons(root,400,1000)
-        ballonw.delete()
-        ballonw.update()
+      ballonw = Baloons(root,400,1000)
+      ballonw.delete()
 
 
 # Main 
@@ -226,6 +247,11 @@ Turnedon = 1
 w = Label(root)
 w.grid(column=10,sticky=(E))
 w.config(text = "Score:"+ str(0))
+
+
+if float(sys.version.split()[0][:3]) < 2.7:
+    print "Python 2.7 or higher required to run this code, " + sys.version.split()[0] + " detected, exiting."
+    exit(1)
 
 
 root.title("Ballons Game")
