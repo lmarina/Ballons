@@ -13,9 +13,9 @@ except ImportError:
          import tkinter as tk
          from tkinter import *
     except ImportError:
-         print "------------------------------------------------------------------------------"
-         print "Warning !!!: a needed software TKINTER has to be installed to run this program"
-         print "------------------------------------------------------------------------------"
+         print("------------------------------------------------------------------------------")
+         print( "Warning !!!: a needed software TKINTER has to be installed to run this program")
+         print("------------------------------------------------------------------------------")
 
 #Ballon's Class
 
