@@ -31,25 +31,45 @@ class Baloons:
         self.xSpeed= app.updateValueDelay(root)
         self.xStep= app.updateValueStep(root)
         self.ySpeed = rootspeed
-
+        
         if self.xSpeed == 2:
-            self.ySpeed = 2000
+            self.ySpeed = 100
         elif self.xSpeed == 3:
-            self.ySpeed = 3000
+            self.ySpeed = 200
         elif self.xSpeed == 4:
-            self.ySpeed = 4000
+            self.ySpeed = 300
         elif self.xSpeed == 5:
-            self.ySpeed = 5000
+            self.ySpeed = 400
         elif self.xSpeed == 6:
-            self.ySpeed = 6000
+            self.ySpeed =  500
         elif self.xSpeed == 7:
-            self.ySpeed = 7000
+            self.ySpeed = 600
         elif self.xSpeed == 8:
-            self.ySpeed = 8000
+            self.ySpeed = 700
         elif self.xSpeed == 9:
-            self.ySpeed = 9000
+            self.ySpeed = 800
         elif self.xSpeed == 10:
+            self.ySpeed = 1000
+        elif self.xSpeed == 11:
+             self.ySpeed = 2000
+        elif self.xSpeed == 12:
+            self.ySpeed = 3000
+        elif self.xSpeed == 13:
+            self.ySpeed = 4000
+        elif self.xSpeed == 14:
+            self.ySpeed = 5000
+        elif self.xSpeed == 15:
+            self.ySpeed = 6000
+        elif self.xSpeed == 16:
+            self.ySpeed = 7000
+        elif self.xSpeed == 17:
+            self.ySpeed = 8000
+        elif self.xSpeed == 18:
+            self.ySpeed = 9000
+        elif self.xSpeed == 19:
             self.ySpeed = 10000
+        elif self.xSpeed == 20:
+            self.ySpeed = 11000
 
         self.update()
         self.update2()
@@ -102,20 +122,17 @@ class Baloons:
       xStep = app.updateValueStep(root)
       trasher = self.canvas.find_withtag("A2")
       trasher2 = self.canvas.find_withtag("A1")
-
-      xState = "normal"
+      
       xTags = "A1"
-
-      if self.ySpeed > 99000 :
-          xState = "disabled"
-
+      xState="normal"
+      
       if trasher:
            self.canvas.delete(trasher)
 
       if trasher2:
            self.canvas.delete(trasher2)
 
-      if xStep > 98:
+      if xStep >= 19:
             xState = 'hidden'
       elif xStep > 1:
             xTags="A3"
@@ -129,7 +146,8 @@ class Baloons:
              
       for i in range(xCount):
               x, y = randint(0, 400-1), randint(0, 400-1)
-              oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", outline="red", width = xWidth, outlinestipple='gray12',state =xState)
+              oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red", outline="red", width = xWidth, outlinestipple='gray12',
+              state=xState)
               self.canvas.itemconfig(oval,tags="A1")
       
       
@@ -143,11 +161,9 @@ class Baloons:
       trasher2 = self.canvas.find_withtag("A2")
 
       xStep = app.updateValueStep(root)
-      xState = "normal"
+      
       xTags="A2"
-
-      if self.ySpeed > 99000 :
-         xState = "disabled"
+      xState="normal"
 
       if trasher:
            self.canvas.delete(trasher)
@@ -155,7 +171,7 @@ class Baloons:
       if trasher2:
           self.canvas.delete(trasher2)
 
-      if xStep > 98:
+      if xStep >= 19:
            xState = 'hidden'
       elif xStep > 1:
            xTags = "A3"
@@ -168,7 +184,8 @@ class Baloons:
 
       for i in range(xCount):
           x, y = randint(0, 400-1), randint(0, 400-1)
-          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red",outline="red",width = xWidth, outlinestipple='gray12',state =xState)
+          oval=self.canvas.create_oval(x-5, y-5, x+5, y+5, fill="red",outline="red",width = xWidth, outlinestipple='gray12',
+                                       state = xState)
           self.canvas.itemconfig(oval,tags="A2")
 
 
@@ -245,7 +262,7 @@ class MyApplication(Frame):
         self.sc1 = Scale(self, variable=1, from_=20, to=1,  width=7)
         self.sc1.grid(row=1, column=2)
         self.sc1.set(10)
-	self.sc1.bind("<ButtonRelease-1>", self.updateValueCount)
+        self.sc1.bind("<ButtonRelease-1>", self.updateValueCount)
         button = Button(root,text='Start', command=helloStart)
         button1 = Button(root,text='Stop', command=helloStop)
         button2 = Button(root,text='Clear', command=helloClear)
@@ -308,19 +325,13 @@ class MyApplication(Frame):
 
 # Functions to initialize buttons
 def helloStart():
-    global Turnedon
 
-    if Turnedon == 1:
-
-        ballonw = Baloons(root,400,1000)
-        Turnedon = 0
-        ballonw.update()
+    ballonw = Baloons(root,400,1000)
+    ballonw.update()
 
 def helloStop():
-     global Turnedon
 
-     Turnedon = 1
-     ballonw = Baloons(root,400,99550)
+    ballonw = Baloons(root,400,99550)
 
 def helloClear():
 
@@ -335,7 +346,6 @@ app.controlFramedelay()
 app.controlFramesize()
 app.controlFramestep()
 
-Turnedon = 1
 
 w = Label(root)
 w.grid(column=10,sticky=(E))
