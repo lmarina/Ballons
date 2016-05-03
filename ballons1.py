@@ -87,28 +87,26 @@ class Baloons:
        itemsr = self.canvas.find_withtag("SR")
        xStep = app.updateValueStep(root)
        
-       #print self.canvas.gettags(item)
+       # if item is in shorter list size half score
 
        if any(item in itemsr for item in item):
             self.canvas.delete(itemsr)
-            self.score = self.score + 1
+            xWidth = 5
 
        if item:
-           if (xStep > 1 and xStep <= 10):
+
+           if (xStep >= 10 and xStep <= 25):
                   item = self.canvas.find_withtag("A3")
-                  xWidth = 10
-           elif (xStep >= 10 and xStep <= 25):
-                  item = self.canvas.find_withtag("A3")
-                  xWidth = 20
+                  xWidth = 15
            elif (xStep >= 25 and xStep <= 50):
                   item = self.canvas.find_withtag("A3")
-                  xWidth = 30
+                  xWidth = 20
            elif (xStep >= 50 and xStep <= 75):
                   item = self.canvas.find_withtag("A3")
-                  xWidth = 40
+                  xWidth = 25
            elif (xStep >= 75 and xStep <= 98 ):
                   item = self.canvas.find_withtag("A3")
-                  xWidth = 50         
+                  xWidth = 30         
  
            self.canvas.delete(item)
            self.score = self.score + xWidth
